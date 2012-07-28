@@ -26,7 +26,7 @@ class ConfigurationManager extends BaseManager
     {
         if (!$this->has($key)) {
             $config = new Configuration();
-            $config->setName($name);
+            $config->setName($key);
             $config->setValue($value);
             $this->em->persist($config);
             $this->em->flush();

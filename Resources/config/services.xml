@@ -7,6 +7,7 @@
     <parameters>
         <parameter key="openify.configuration_manager.class">Openify\Bundle\ConfigurationBundle\Entity\Manager\ConfigurationManager</parameter>
         <parameter key="openify.configuration_manager.twig_extension.class">Openify\Bundle\ConfigurationBundle\Twig\ConfigurationExtension</parameter>        
+        <parameter key="openify.configuration_manager.table_prefix_subscriber.class">Openify\Bundle\ConfigurationBundle\Subscriber\TablePrefixSubscriber</parameter>        
     </parameters>
 
     <services>
@@ -19,6 +20,10 @@
             <argument type="service" id="openify.configuration" />
         </service>
 
+        <service id="openify.configuration.table_prefix_subscriber" class="%openify.configuration_manager.table_prefix_subscriber.class%" public="false">
+            <tag name="doctrine.event_subscriber" />
+            <argument>%openify.configuration.table_prefix%</argument>
+        </service>
         
     </services>
 </container>
