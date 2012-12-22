@@ -22,7 +22,7 @@ class ConfigurationManager extends BaseManager
      * @access public
      * @return void
      */
-    public function add($key, $value = null, $namespace = null)
+    public function add($key, $value = null, $namespace = '')
     {
         if (!$this->has($key, $namespace)) {
             $config = new Configuration();
@@ -46,7 +46,7 @@ class ConfigurationManager extends BaseManager
      * @access public
      * @return ConfigurationManager
      */
-    public function update($key, $value, $namespace = null)
+    public function update($key, $value, $namespace = '')
     {
         if ($config = $this->find($key, $namespace)) {
             $config->setValue($value);
@@ -68,9 +68,9 @@ class ConfigurationManager extends BaseManager
      * @access public
      * @return ConfigurationManager
      */
-    public function set($key, $value, $namespace = null)
+    public function set($key, $value, $namespace = '')
     {
-        $config = $this->find($key, $namespace));
+        $config = $this->find($key, $namespace);
 
         if(!$config) {
             $config = new Configuration();
@@ -91,9 +91,9 @@ class ConfigurationManager extends BaseManager
      * @access public
      * @return mixed Requested value
      */
-    public function get($key, $default = null, $namespace = null)
+    public function get($key, $default = null, $namespace = '')
     {
-        if ($config = $this->getRepository()->findOneBy(array('name' => $key, 'namespace' => $namespace))) {
+        if ($config = $this->find($key, $namespace)) {
             return $config->getValue();
         }
 
@@ -107,12 +107,12 @@ class ConfigurationManager extends BaseManager
      * @access public
      * @return boolean
      */
-    public function has($key, $namespace = null)
+    public function has($key, $namespace = '')
     {
         return $this->find($key, $namespace);
     }
 
-    public function find($key, $namespace = null)
+    public function find($key, $namespace = '')
     {
         return $this->getRepository()->findOneBy(array('name' => $key, 'namespace' => $namespace));
     }

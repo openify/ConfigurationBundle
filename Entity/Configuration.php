@@ -32,7 +32,7 @@ class Configuration
      *
      * @ORM\Column(name="namespace", type="string", length=50)
      */
-    private $namespace;
+    private $namespace = '';
 
     /**
      * Set name
