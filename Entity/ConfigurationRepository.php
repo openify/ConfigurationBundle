@@ -12,4 +12,15 @@ use Doctrine\ORM\EntityRepository;
  */
 class ConfigurationRepository extends EntityRepository
 {
+    /**
+     * Gets a list of config entities by namespace
+     *
+     * @param string $namespace
+     *
+     * @return array
+     */
+    public function findAllForNamespace($namespace)
+    {
+        return $this->findByNamespace($namespace);
+    }
 }

@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Openify\Bundle\ConfigurationBundle\Entity\Configuration
  *
- * @ORM\Table()
+ * @ORM\Table(name="config", uniqueConstraints={@ORM\UniqueConstraint(name="namespace_name_idx", columns={"namespace", "name"})})
  * @ORM\Entity(repositoryClass="Openify\Bundle\ConfigurationBundle\Entity\ConfigurationRepository")
  */
 class Configuration
@@ -14,7 +14,7 @@ class Configuration
     /**
      * @var string $name
      *
-     * @ORM\Column(name="name", type="string", length=128, unique=true)
+     * @ORM\Column(name="name", type="string", length=128)
      * @ORM\Id
      */
     private $name;
@@ -25,6 +25,14 @@ class Configuration
      * @ORM\Column(name="value", type="text", nullable=true)
      */
     private $value;
+
+
+    /**
+     * @var string $namespace
+     *
+     * @ORM\Column(name="namespace", type="string", length=50)
+     */
+    private $namespace;
 
     /**
      * Set name
@@ -70,5 +78,30 @@ class Configuration
     public function getValue()
     {
         return $this->value;
+    }
+
+
+    /**
+     * Set namespace
+     *
+     * @param string $namespace
+     *
+     * @return Configuration
+     */
+    public function setNamespace($namespace)
+    {
+        $this->namespace = $namespace;
+
+        return $this;
+    }
+
+    /**
+     * Get namespace
+     *
+     * @return string
+     */
+    public function getNamespace()
+    {
+        return $this->namespace;
     }
 }
