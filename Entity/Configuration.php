@@ -65,6 +65,10 @@ class Configuration
      */
     public function setValue($value)
     {
+        if(is_array($value)) {
+            $value = serialize($value);
+        }
+
         $this->value = $value;
 
         return $this;
@@ -77,6 +81,11 @@ class Configuration
      */
     public function getValue()
     {
+        $data = @unserialize($this->value);
+        if($str === 'b:0;' || $data !== false) {
+            return $data;
+        }
+
         return $this->value;
     }
 
