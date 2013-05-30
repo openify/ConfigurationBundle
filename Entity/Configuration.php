@@ -82,9 +82,11 @@ class Configuration
      */
     public function getValue()
     {
-        $data = @unserialize($this->value);
-        if($this->value === 'b:0;' || $data !== false) {
-            return $data;
+        if($this->value) {
+            $data = @unserialize($this->value);
+            if($this->value === 'b:0;' || $data !== false) {
+                return $data;
+            }
         }
 
         return $this->value;
