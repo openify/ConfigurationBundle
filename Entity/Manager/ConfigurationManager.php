@@ -22,19 +22,20 @@ class ConfigurationManager extends BaseManager
      * @access public
      * @return void
      */
-    public function add($key, $value = null)
+    public function add($key, $value = null, $namespace = '')
     {
-        if (!$this->has($key)) {
+        if (!$this->has($key, $namespace)) {
             $config = new Configuration();
             $config->setName($key);
             $config->setValue($value);
+            $config->setNamespace($namespace);
             $this->em->persist($config);
             $this->em->flush();
+            return $this;
         } else {
             throw new ConfigurationException(
                     sprintf("The key %s already exists", $key));
         }
-
     }
 
     /**
@@ -45,9 +46,9 @@ class ConfigurationManager extends BaseManager
      * @access public
      * @return ConfigurationManager
      */
-    public function set($key, $value)
+    public function update($key, $value, $namespace = '')
     {
-        if ($config = $this->getRepository()->find($key)) {
+        if ($config = $this->find($key, $namespace)) {
             $config->setValue($value);
             $this->em->persist($config);
             $this->em->flush();
@@ -59,20 +60,44 @@ class ConfigurationManager extends BaseManager
     }
 
     /**
+     * Set a value
+     *
+     * @param string $key   Unique key
+     * @param mixed  $value A value
+     * @param string $namespane The namespace
+     * @access public
+     * @return ConfigurationManager
+     */
+    public function set($key, $value, $namespace = '')
+    {
+        $config = $this->find($key, $namespace);
+
+        if(!$config) {
+            $config = new Configuration();
+            $config->setName($key);
+            $config->setNamespace($namespace);
+        }
+
+        $config->setValue($value);
+        $this->em->persist($config);
+        $this->em->flush();
+        return $this;
+    }
+
+    /**
      * Retrieve a value
      *
      * @param string $key Unique identifier
      * @access public
-     * @return mixed Requested value, or ConfigurationException
+     * @return mixed Requested value
      */
-    public function get($key)
+    public function get($key, $default = null, $namespace = '')
     {
-        if ($config = $this->getRepository()->find($key)) {
+        if ($config = $this->find($key, $namespace)) {
             return $config->getValue();
-        } else {
-            throw new ConfigurationException(
-                    sprintf("The key %s doesn't exist", $key));
         }
+
+        return $default;
     }
 
     /**
@@ -82,9 +107,14 @@ class ConfigurationManager extends BaseManager
      * @access public
      * @return boolean
      */
-    public function has($key)
+    public function has($key, $namespace = '')
     {
-        return $this->getRepository()->find($key);
+        return $this->find($key, $namespace);
+    }
+
+    public function find($key, $namespace = '')
+    {
+        return $this->getRepository()->findOneBy(array('name' => $key, 'namespace' => $namespace));
     }
 
     public function getRepository()
