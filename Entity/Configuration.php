@@ -20,7 +20,7 @@ class Configuration
     private $name;
 
     /**
-     * @var text $value
+     * @var string $value
      *
      * @ORM\Column(name="value", type="text", nullable=true)
      */
@@ -61,7 +61,7 @@ class Configuration
     /**
      * Set value
      *
-     * @param  text          $value
+     * @param  string        $value
      * @return Configuration
      */
     public function setValue($value)
@@ -78,7 +78,7 @@ class Configuration
     /**
      * Get value
      *
-     * @return text
+     * @return string
      */
     public function getValue()
     {

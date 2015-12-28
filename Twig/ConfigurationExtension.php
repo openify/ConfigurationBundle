@@ -6,7 +6,7 @@ use Openify\Bundle\ConfigurationBundle\Entity\Manager\ConfigurationManager;
 class ConfigurationExtension extends \Twig_Extension {
 
     /**
-     * @var Configuration
+     * @var ConfigurationManager
      */
     protected $configuration;
 

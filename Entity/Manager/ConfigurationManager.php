@@ -1,26 +1,31 @@
 <?php
 namespace Openify\Bundle\ConfigurationBundle\Entity\Manager;
-use Doctrine\ORM\EntityManager;
+
+use Doctrine\Bundle\DoctrineBundle\Registry;
 use Openify\Bundle\ConfigurationBundle\Entity\Manager\BaseManager;
 use Openify\Bundle\ConfigurationBundle\Entity\Configuration;
 use Openify\Bundle\ConfigurationBundle\Exception\ConfigurationException;
 
 class ConfigurationManager extends BaseManager
 {
-    protected $em;
+    protected $doctrine;
 
-    public function __construct(EntityManager $em)
+    public function __construct(Registry $doctrine)
     {
-        $this->em = $em;
+        $this->doctrine = $doctrine;
     }
 
     /**
      * Add a key
      *
-     * @param string $key   Unique key
-     * @param mixed  $value A value
+     * @param string $key Unique key
+     * @param mixed $value A value
+     * @param string $namespace
+     *
+     * @return $this
+     *
+     * @throws ConfigurationException
      * @access public
-     * @return void
      */
     public function add($key, $value = null, $namespace = '')
     {
@@ -29,8 +34,8 @@ class ConfigurationManager extends BaseManager
             $config->setName($key);
             $config->setValue($value);
             $config->setNamespace($namespace);
-            $this->em->persist($config);
-            $this->em->flush();
+            $this->doctrine->getManager()->persist($config);
+            $this->doctrine->getManager()->flush();
             return $this;
         } else {
             throw new ConfigurationException(
@@ -41,18 +46,23 @@ class ConfigurationManager extends BaseManager
     /**
      * Update a value
      *
-     * @param string $key   Unique key
-     * @param mixed  $value A value
-     * @access public
+     * @param string $key Unique key
+     * @param mixed $value A value
+     * @param string $namespace
+     *
      * @return ConfigurationManager
+     *
+     * @throws ConfigurationException
+     * @access public
      */
     public function update($key, $value, $namespace = '')
     {
         if ($config = $this->find($key, $namespace)) {
             $config->setValue($value);
-            $this->em->persist($config);
-            $this->em->flush();
-			return $this;
+            $this->doctrine->getManager()->persist($config);
+            $this->doctrine->getManager()->flush();
+
+            return $this;
         } else {
             throw new ConfigurationException(
                     sprintf("The key %s doesn't exist", $key));
@@ -62,11 +72,14 @@ class ConfigurationManager extends BaseManager
     /**
      * Set a value
      *
-     * @param string $key   Unique key
-     * @param mixed  $value A value
-     * @param string $namespane The namespace
-     * @access public
+     * @param string $key Unique key
+     * @param mixed $value A value
+     * @param string $namespace
+     *
      * @return ConfigurationManager
+     *
+     * @internal param string $namespane The namespace
+     * @access public
      */
     public function set($key, $value, $namespace = '')
     {
@@ -79,8 +92,9 @@ class ConfigurationManager extends BaseManager
         }
 
         $config->setValue($value);
-        $this->em->persist($config);
-        $this->em->flush();
+        $this->doctrine->getManager()->persist($config);
+        $this->doctrine->getManager()->flush();
+
         return $this;
     }
 
@@ -104,8 +118,11 @@ class ConfigurationManager extends BaseManager
      * Check if a key exists
      *
      * @param string $key Unique key
+     * @param string $namespace
+     *
+     * @return bool
+     *
      * @access public
-     * @return boolean
      */
     public function has($key, $namespace = '')
     {
@@ -119,7 +136,7 @@ class ConfigurationManager extends BaseManager
 
     public function getRepository()
     {
-        return $this->em
+        return $this->doctrine->getManager()
                 ->getRepository('OpenifyConfigurationBundle:Configuration');
     }
 

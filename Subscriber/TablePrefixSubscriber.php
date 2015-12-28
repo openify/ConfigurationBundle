@@ -1,9 +1,11 @@
 <?php
 namespace Openify\Bundle\ConfigurationBundle\Subscriber;
 
+use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
+use Doctrine\ORM\Mapping\ClassMetadataInfo;
 
-class TablePrefixSubscriber implements \Doctrine\Common\EventSubscriber
+class TablePrefixSubscriber implements EventSubscriber
 {
     protected $prefix = '';
 
@@ -19,8 +21,9 @@ class TablePrefixSubscriber implements \Doctrine\Common\EventSubscriber
 
     public function loadClassMetadata(LoadClassMetadataEventArgs $args)
     {
+        /** @var ClassMetadataInfo $classMetadata */
         $classMetadata = $args->getClassMetadata();
-        if($classMetadata->namespace == "Openify\Bundle\ConfigurationBundle\Entity") {
+        if($classMetadata->namespace == "Openify\\Bundle\\ConfigurationBundle\\Entity") {
             $classMetadata->setTableName($this->prefix . $classMetadata->getTableName());
         }
     }
