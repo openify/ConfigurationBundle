@@ -74,11 +74,10 @@ class ConfigurationManager extends BaseManager
      *
      * @param string $key Unique key
      * @param mixed $value A value
-     * @param string $namespace
+     * @param string $namespace The namespace
      *
      * @return ConfigurationManager
      *
-     * @internal param string $namespane The namespace
      * @access public
      */
     public function set($key, $value, $namespace = '')
@@ -102,8 +101,12 @@ class ConfigurationManager extends BaseManager
      * Retrieve a value
      *
      * @param string $key Unique identifier
-     * @access public
+     * @param null $default
+     * @param string $namespace
+     *
      * @return mixed Requested value
+     *
+     * @access public
      */
     public function get($key, $default = null, $namespace = '')
     {
@@ -129,6 +132,11 @@ class ConfigurationManager extends BaseManager
         return $this->find($key, $namespace);
     }
 
+    /**
+     * @param $key
+     * @param string $namespace
+     * @return null|Configuration
+     */
     public function find($key, $namespace = '')
     {
         return $this->getRepository()->findOneBy(array('name' => $key, 'namespace' => $namespace));
