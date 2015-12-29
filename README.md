@@ -9,7 +9,7 @@ A bundle which allow you to easily store you application configuration.
 ## composer.json
     {
         "require": {
-            "openify/configuration-bundle": "dev-master"
+            "openify/configuration-bundle": "~1.0.0"
         },
     }
 
