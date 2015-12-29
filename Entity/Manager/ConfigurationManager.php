@@ -2,6 +2,7 @@
 namespace Openify\Bundle\ConfigurationBundle\Entity\Manager;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
+use Openify\Bundle\ConfigurationBundle\Entity\ConfigurationRepository;
 use Openify\Bundle\ConfigurationBundle\Entity\Manager\BaseManager;
 use Openify\Bundle\ConfigurationBundle\Entity\Configuration;
 use Openify\Bundle\ConfigurationBundle\Exception\ConfigurationException;
@@ -142,6 +143,9 @@ class ConfigurationManager extends BaseManager
         return $this->getRepository()->findOneBy(array('name' => $key, 'namespace' => $namespace));
     }
 
+    /**
+     * @return ConfigurationRepository
+     */
     public function getRepository()
     {
         return $this->doctrine->getManager()
